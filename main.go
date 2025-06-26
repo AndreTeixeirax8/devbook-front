@@ -2,13 +2,17 @@ package main
 
 import (
 	"devbook-front/src/router"
+	"devbook-front/src/utils"
 	"fmt"
 	"log"
 	"net/http"
 )
 
 func main() {
-	fmt.Println("Rodando app web com Go!")
+
+	utils.CarregarTemplates()
 	r := router.Gerar()
-	log.Fatal(http.ListenAndServe(":8080", r))
+
+	fmt.Println("Executando na porta 4200")
+	log.Fatal(http.ListenAndServe(":4200", r))
 }
