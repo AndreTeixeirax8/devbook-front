@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"devbook-front/src/respostas"
 	"encoding/json"
-	"log"
 	"net/http"
 )
 
@@ -19,16 +18,21 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 	})
 
 	if erro != nil {
-		log.Fatal(erro)
+		respostas.JSON(w, http.StatusBadRequest, respostas.ErroApi{Erro: erro.Error()})
 	}
 
 	response, erro :=
 		http.Post("http://localhost:3000/usuarios", "application/json", bytes.NewBuffer(usuario))
 
 	if erro != nil {
-		log.Fatal(erro)
+		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroApi{Erro: erro.Error()})
 	}
 	defer response.Body.Close()
+
+	if response.StatusCode >= 400 {
+		respostas.TratarStatusCodeDeErro(w, response)
+		return
+	}
 
 	respostas.JSON(w, response.StatusCode, nil)
 
