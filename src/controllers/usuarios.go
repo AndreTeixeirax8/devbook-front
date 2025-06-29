@@ -2,8 +2,8 @@ package controllers
 
 import (
 	"bytes"
+	"devbook-front/src/respostas"
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 )
@@ -30,6 +30,6 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 	}
 	defer response.Body.Close()
 
-	fmt.Println(response.Body)
+	respostas.JSON(w, response.StatusCode, nil)
 
 }

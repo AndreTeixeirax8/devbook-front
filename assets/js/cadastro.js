@@ -4,8 +4,6 @@ function criarUsuario(evento) {
   evento.preventDefault();
 
   if ($("#senha").val() != $("#confirmar-senha").val()) {
-    console.log("Senha:", $("#senha").val());
-    console.log("Confirmar:", $("#confirmar-senha").val());
     alert("As senhas não conferem");
     return;
   }
@@ -20,5 +18,11 @@ function criarUsuario(evento) {
       nick: $("#nick").val(),
       senha: $("#senha").val(),
     }),
-  });
+  })
+    .done(function () {
+      alert("Usuário cadastrado com sucesso!");
+    })
+    .fail(function () {
+      alert("Erro ao cadastrar usuário. Tente novamente.");
+    });
 }
