@@ -5,6 +5,8 @@ import (
 	"devbook-front/src/respostas"
 	"encoding/json"
 	"net/http"
+	"fmt"
+	"devbook-front/src/config"
 )
 
 func CriarUsuario(w http.ResponseWriter, r *http.Request) {
@@ -21,8 +23,9 @@ func CriarUsuario(w http.ResponseWriter, r *http.Request) {
 		respostas.JSON(w, http.StatusBadRequest, respostas.ErroApi{Erro: erro.Error()})
 	}
 
+	url := fmt.Sprintf("%s/usuarios", config.APIURL)
 	response, erro :=
-		http.Post("http://localhost:3000/usuarios", "application/json", bytes.NewBuffer(usuario))
+		http.Post(url, "application/json", bytes.NewBuffer(usuario))
 
 	if erro != nil {
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroApi{Erro: erro.Error()})

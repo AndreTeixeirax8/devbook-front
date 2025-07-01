@@ -4,6 +4,7 @@ import (
 	"devbook-front/src/config"
 	"devbook-front/src/router"
 	"devbook-front/src/utils"
+	 "devbook-front/src/cookies"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 
 func main() {
 	config.Carregar()
+	cookies.Configurar()
 	utils.CarregarTemplates()
 	r := router.Gerar()
 

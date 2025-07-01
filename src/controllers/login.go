@@ -5,6 +5,7 @@ import (
 	"devbook-front/src/config"
 	"devbook-front/src/modelos"
 	"devbook-front/src/respostas"
+	 "devbook-front/src/cookies"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -41,6 +42,11 @@ func FazerLogin(w http.ResponseWriter, r *http.Request) {
 	var dadosAutenticacao modelos.DadosAutenticacao
 	if erro = json.NewDecoder(response.Body).Decode(&dadosAutenticacao); erro != nil {
 		respostas.JSON(w, http.StatusInternalServerError, respostas.ErroApi{Erro: erro.Error()})
+		return
+	}
+
+	if  erro = cookies.Salvar(w, dadosAutenticacao.ID, dadosAutenticacao.Token); erro != nil {
+			respostas.JSON(w, http.StatusInternalServerError, respostas.ErroApi{Erro: erro.Error()})
 		return
 	}
 
