@@ -15,6 +15,7 @@ function fazerLogin(event) {
       window.location = "/home";
     })
     .fail(function (erro) {
+      console.log(erro);
       alert("Usuario ou senha invalidos.");
     });
 }

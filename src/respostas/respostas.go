@@ -2,6 +2,7 @@ package respostas
 
 import (
 	"encoding/json"
+	"io"
 	"log"
 	"net/http"
 )
@@ -23,6 +24,8 @@ func JSON(w http.ResponseWriter, statusCode int, dados interface{}) {
 
 func TratarStatusCodeDeErro(w http.ResponseWriter, r *http.Response) {
 	var erro ErroApi
+	bodyBytes, _ := io.ReadAll(r.Body)
+	log.Printf("Erro recebido do backend: %s\n", string(bodyBytes))
 	json.NewDecoder(r.Body).Decode(&erro)
 	JSON(w, r.StatusCode, erro)
 }
