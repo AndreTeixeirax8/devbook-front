@@ -50,20 +50,19 @@ function curtirPublicacao(evento) {
       elementoClicado.prop("disabled", false);
     });
 }
-
+//TODO:Criar uma lógica no back-end pára descurtir e curtir e remover essa feita por JS
 function descurtirPublicacao(evento) {
   evento.preventDefault();
 
   const elementoClicado = $(evento.target);
   const publicacaoId = elementoClicado.closest("div").data("publicacao-id");
-  console.log("Tentando descurtir publicação:", publicacaoId);
+
   elementoClicado.prop("disabled", true);
   $.ajax({
     url: `publicacoes/${publicacaoId}/descurtir`,
     method: "POST",
   })
     .done(function () {
-      console.log("Descurtida com sucesso!");
       const contadorDeCurtidas = elementoClicado.next("span");
       const quantidadeDeCurtidas = parseInt(contadorDeCurtidas.text());
       contadorDeCurtidas.text(quantidadeDeCurtidas - 1);
@@ -72,7 +71,6 @@ function descurtirPublicacao(evento) {
       elementoClicado.addClass("curtir-publicacao");
     })
     .fail(function (jqXHR, textStatus, errorThrown) {
-      console.error("Erro ao descurtir:", jqXHR, textStatus, errorThrown);
       alert("Erro ao  Curtir");
     })
     .always(function () {
