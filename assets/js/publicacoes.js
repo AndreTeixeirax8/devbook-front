@@ -1,6 +1,7 @@
 $("#nova-publicacao").on("submit", criarPublicacao);
 $(document).on("click", ".curtir-publicacao", curtirPublicacao);
 $(document).on("click", ".descurtir-publicacao", descurtirPublicacao);
+$("#atualizar-publicacao").on("click", atualizarPublicacao);
 
 function criarPublicacao(evento) {
   evento.preventDefault(); // <-- CERTO
@@ -75,5 +76,29 @@ function descurtirPublicacao(evento) {
     })
     .always(function () {
       elementoClicado.prop("disabled", false);
+    });
+}
+
+function atualizarPublicacao(evento) {
+  $(this).prop("disabled", true);
+
+  const publicacaoId = $(this).data("publicacao-id");
+
+  $.ajax({
+    url: `/publicacoes/${publicacaoId}`,
+    method: "PUT",
+    data: {
+      titulo: $("#titulo").val(),
+      conteudo: $("#conteudo").val(),
+    },
+  })
+    .done(function () {
+      alert("Publicacao editada");
+    })
+    .fail(function () {
+      alert("Erro ao editar publicacao");
+    })
+    .always(function () {
+      $("#atualizar-publicacao").prop("disabled", false);
     });
 }
