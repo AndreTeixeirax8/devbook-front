@@ -4,7 +4,7 @@ function criarUsuario(evento) {
   evento.preventDefault();
 
   if ($("#senha").val() != $("#confirmar-senha").val()) {
-    alert("As senhas não conferem");
+    Swal.fire("Ops...", "As senhas não conferem", error);
     return;
   }
 
@@ -20,9 +20,27 @@ function criarUsuario(evento) {
     }),
   })
     .done(function () {
-      alert("Usuário cadastrado com sucesso!");
+      //faz o cadastro de usuario e já chama rota de login
+      Swal.fire("Sucesso!", "Usuário cadastrado com sucesso!", "success").then(
+        function () {
+          $.ajax({
+            url: "/login",
+            method: "POST",
+            data: {
+              email: $("#email").val(),
+              senha: $("#senha").val(),
+            },
+          })
+            .done(function () {
+              window.location = "/home";
+            })
+            .fail(function () {
+              Swal.fire("Ops...", "Erro ao cadastrar usuario", error);
+            });
+        }
+      );
     })
     .fail(function (erro) {
-      alert("Erro ao cadastrar usuário. Tente novamente.");
+      Swal.fire("Ops...", "Erro ao cadastrar usuario", error);
     });
 }

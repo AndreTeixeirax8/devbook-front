@@ -2,6 +2,8 @@ $("#nova-publicacao").on("submit", criarPublicacao);
 $(document).on("click", ".curtir-publicacao", curtirPublicacao);
 $(document).on("click", ".descurtir-publicacao", descurtirPublicacao);
 $("#atualizar-publicacao").on("click", atualizarPublicacao);
+//$(".deletar-publicacao").on("click", deletarPublicacao);
+$(document).on("click", ".deletar-publicacao", deletarPublicacao);
 
 function criarPublicacao(evento) {
   evento.preventDefault(); // <-- CERTO
@@ -93,7 +95,11 @@ function atualizarPublicacao(evento) {
     },
   })
     .done(function () {
-      alert("Publicacao editada");
+      Swal.fire("Sucesso!", "Publicação atualizada", "success").then(
+        function () {
+          window.location = "/home";
+        }
+      );
     })
     .fail(function () {
       alert("Erro ao editar publicacao");
@@ -101,4 +107,73 @@ function atualizarPublicacao(evento) {
     .always(function () {
       $("#atualizar-publicacao").prop("disabled", false);
     });
+}
+
+function deletarPublicacao(evento) {
+  evento.preventDefault();
+
+  Swal.fire({
+    title: "Atencao!",
+    text: "Tem certeza que deseja excluir",
+    showCancelButton: true,
+    cancelButtonText: "Cancelar",
+    icon: "warning",
+  }).then(function (confirmacao) {
+    if (!confirmacao.value) return;
+
+    const elementoClicado = $(evento.target);
+    const publicacao = elementoClicado.closest("div");
+    const publicacaoId = publicacao.data("publicacao-id");
+
+    elementoClicado.prop("disabled", true);
+
+    $.ajax({
+      url: `/publicacoes/${publicacaoId}`,
+      method: "DELETE",
+      dataType: "text", // <-- AQUI
+    })
+      .done(function () {
+        publicacao.fadeOut("slow", function () {
+          $(this).remove();
+        });
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) {
+        console.error(
+          "Erro ao deletar:",
+          jqXHR.status,
+          jqXHR.responseText,
+          textStatus,
+          errorThrown
+        );
+        alert("Erro ao deletar publicacao");
+      });
+  });
+
+  /*
+  $.ajax({
+    url: `/publicacoes/${publicacaoId}`,
+    method: "DELETE",
+    dataType: "text", // <-- AQUI
+  })
+    .done(function (respostaTexto) {
+      try {
+        const resposta = JSON.parse(respostaTexto);
+        alert(resposta.mensagem || "Removido!");
+      } catch {
+        alert("Removido! (resposta não era JSON)");
+      }
+      publicacao.fadeOut("slow", function () {
+        $(this).remove();
+      });
+    })
+    .fail(function (jqXHR, textStatus, errorThrown) {
+      console.error(
+        "Erro ao deletar:",
+        jqXHR.status,
+        jqXHR.responseText,
+        textStatus,
+        errorThrown
+      );
+      alert("Erro ao deletar publicacao");
+    });*/
 }
