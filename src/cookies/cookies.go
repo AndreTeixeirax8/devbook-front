@@ -4,6 +4,7 @@ import (
 	"devbook-front/src/config"
 	"log"
 	"net/http" // <-- Adicione esta linha
+	"time"
 
 	"github.com/gorilla/securecookie"
 )
@@ -48,4 +49,14 @@ func Ler(r *http.Request) (map[string]string, error) {
 	}
 	log.Printf("-----> Lido do cookie: id=%s, token=%s\n", valores["id"], valores["token"])
 	return valores, nil
+}
+
+func Deletar(w http.ResponseWriter) {
+	http.SetCookie(w, &http.Cookie{
+		Name:     "dados",
+		Value:    "",
+		Path:     "/",
+		HttpOnly: true,
+		Expires:  time.Unix(0, 0),
+	})
 }
