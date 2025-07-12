@@ -122,3 +122,17 @@ func CarregarPaginaDeUsuarios(w http.ResponseWriter, r *http.Request) {
 	utils.ExecutarTemplate(w, "usuarios.html", usuarios)
 
 }
+
+func CarregarPerfilDoUsuario(w http.ResponseWriter, r *http.Request) {
+	parametros := mux.Vars(r)
+	usuarioID, erro := strconv.ParseUint(parametros["usuarioId"], 10, 64)
+	if erro != nil {
+		respostas.JSON(w, http.StatusBadRequest, respostas.ErroApi{Erro: erro.Error()})
+		return
+	}
+
+	usuario, erro := modelos.BuscarUsuarioCompleto(usuarioID, r)
+
+	fmt.Println(usuario, erro)
+
+}
