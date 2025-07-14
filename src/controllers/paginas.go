@@ -141,11 +141,11 @@ func CarregarPerfilDoUsuario(w http.ResponseWriter, r *http.Request) {
 	usuarioLogadoID, _ := strconv.ParseUint(cookie["id"], 10, 64)
 
 	utils.ExecutarTemplate(w, "usuario.html", struct {
-		Usuario          modelos.Usuario
-		UsuarioLoogadoID uint64
+		Usuario         modelos.Usuario
+		UsuarioLogadoID uint64
 	}{
-		Usuario:          usuario,
-		UsuarioLoogadoID: usuarioLogadoID,
+		Usuario:         usuario,
+		UsuarioLogadoID: usuarioLogadoID,
 	})
 
 }

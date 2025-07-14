@@ -8,6 +8,16 @@
   </head>
   <body>
     {{template "cabecalho" }}
+
+    {{ $SeguidoPeloUsuarioLogado := false }}
+
+    {{ range .Usuario.Seguidores }}
+     {{ if(eq .ID $.UsuarioLogadoID ) }}
+        {{ $SeguidoPeloUsuarioLogado = true }}
+      {{end}}
+
+     {{ end }}
+
     <div class="container-fluid">
       <div class="row mt-4">
         <div class="col-12">
@@ -27,10 +37,42 @@
               <p class="card-text">
                 <a href="#"> Seguindo:{{ len .Usuario.Seguindo }} </a>
               </p>
+              <a class="card-link">
+                {{ if $SeguidoPeloUsuarioLogado }}
+                 <button id="parar-de-seguir" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}"> Parar de Seguir</button>
+                 {{ else }}
+                 <button id="seguir" class="btn btn-info" data-usuario-id="{{ .Usuario.ID }}"> Seguir</button>
+                 {{ end }}
+              </a>
+             
             </div>
           </div>
         </div>
       </div>
+
+      <div class="row mt-4">
+          <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="card-title">
+                      <h5 class="card-title"> Publicacao do Usuario {{ .Usuario.Nick }}</h5>
+                      <p class="card-text">
+                          {{ range .Usuario.Publicacoes }}
+                            {{ template "publicacao-sem-permissao" . }}
+                            {{ else }}
+                            <p class="text-muted text-center">Nenhuma publicacao</p>
+                          {{ end }}
+                      </p>
+                  </div>
+
+                </div>
+
+              </div>
+          </div>
+      </div>
     </div>
+    {{ template "rodape" }}
+    {{ template "scripts" }}
+    <script src="/assets/js/publicacoes.js"></script>
   </body>
 </html>
