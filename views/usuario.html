@@ -32,10 +32,12 @@
               </h6>
 
               <p class="card-text">
-                <a href="#"> Seguidores:{{ len .Usuario.Seguidores }} </a>
+                <a href="#" data-toggle="modal" data-target="#modal-seguidores">
+                   Seguidores:{{ len .Usuario.Seguidores }} </a>
               </p>
               <p class="card-text">
-                <a href="#"> Seguindo:{{ len .Usuario.Seguindo }} </a>
+                <a href="#" data-toggle="modal" data-target="#modal-seguindo">
+                   Seguindo:{{ len .Usuario.Seguindo }} </a>
               </p>
               <a class="card-link">
                 {{ if $SeguidoPeloUsuarioLogado }}
@@ -71,6 +73,8 @@
           </div>
       </div>
     </div>
+    {{ template "modal-seguidores" .Usuario }}
+        {{ template "modal-seguindo" .Usuario }}
     {{ template "rodape" }}
     {{ template "scripts" }}
     <script src="/assets/js/publicacoes.js"></script>
