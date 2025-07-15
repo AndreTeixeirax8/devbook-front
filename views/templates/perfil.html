@@ -46,6 +46,27 @@
 
     </div>
 
+     <div class="row mt-4">
+          <div class="col-12">
+              <div class="card">
+                <div class="card-body">
+                  <div class="card-title">
+                      <h5 class="card-title"> Publicacao do Usuario {{ .Nick }}</h5>
+                      <p class="card-text">
+                          {{ range .Publicacoes }}
+                            {{ template "publicacao-com-permissao" . }}
+                            {{ else }}
+                            <p class="text-muted text-center">Nenhuma publicacao</p>
+                          {{ end }}
+                      </p>
+                  </div>
+
+                </div>
+
+              </div>
+          </div>
+      </div>
+
   </div>
 
 
@@ -55,6 +76,7 @@
     {{ template "modal-seguindo" .Seguindo }}
 
     {{ template "scripts" }}
+    <script src="/assets/js/publicacoes.js"></script>
 
   </body>
 </html>
