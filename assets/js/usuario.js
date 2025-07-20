@@ -1,7 +1,8 @@
 $("#parar-de-seguir").on("click", pararDeSeguir);
 $("#seguir").on("click", seguir);
 $("#editar-usuario").on("submit", editar);
-$("#atualizarSenha").on("submit", atualizarSenha);
+$("#atualizar-senha").on("submit", atualizarSenha);
+$("#deletar-usuario").on("click", deletarUsuario);
 
 function pararDeSeguir() {
   const usuarioId = $(this).data("usuario-id");
@@ -62,27 +63,59 @@ function editar(evento) {
 function atualizarSenha(evento) {
   evento.preventDefault();
 
-  if ($("#nova-senha").val() != $("#confirmar-senha").val()) {
-    Swal.fire("Ops...", "As Senhas não coincidem!", "warning");
+  const senhaAtual = $("#senha-atual").val();
+  const novaSenha = $("#nova-senha").val();
+  const confirmarSenha = $("#confirmar-senha").val();
+
+  if (novaSenha !== confirmarSenha) {
+    Swal.fire("Ops...", "As senhas não coincidem!", "warning");
     return;
   }
 
   $.ajax({
     url: "/atualizar-senha",
     method: "POST",
-    data: {
-      atual: $("#senha-atual").val(),
-      nova: $("#nova-senha").val(),
-    },
+    contentType: "application/json",
+    data: JSON.stringify({
+      atual: senhaAtual,
+      nova: novaSenha,
+    }),
   })
     .done(function () {
-      Swal.fire("Sucesso", "A Senha foi atualizada", "success").then(
+      Swal.fire("Sucesso!", "Senha atualizada com sucesso!", "success").then(
         function () {
           window.location = "/perfil";
         }
       );
     })
     .fail(function () {
-      Swal.fire("Ops...", "Falha ao alterar as senhas", "error");
+      Swal.fire("Ops...", "Falha ao atualizar a senha!", "error");
     });
+}
+
+function deletarUsuario(evento) {
+  Swal.fire({
+    title: "Atenção!",
+    text: "Tem certeza que deseja apagar? Ação é irreversivel",
+    showCancelButton: true,
+    cancelButtonText: "Cancelar",
+    icon: "warning",
+  }).then(function (confirmacao) {
+    if (confirmacao.value) {
+      $.ajax({
+        url: "/deletarUsuario",
+        method: "DELETE",
+      })
+        .done(function () {
+          Swal.fire("Sucesso!", "Seu usuario foi excluido", "success").then(
+            function () {
+              window.location = "/logout";
+            }
+          );
+        })
+        .fail(function () {
+          Swal.fire("Ops..", "Ocorreu um erro ao excluir o usuario", "error");
+        });
+    }
+  });
 }
